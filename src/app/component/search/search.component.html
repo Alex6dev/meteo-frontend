@@ -1,0 +1,10 @@
+<div class="fr-search-bar formulaireSearch" id="header-search" role="search">
+   <label class="fr-label" for="search-784-input">
+       Merci d'indiquer le nom ou le code postal de la ville que vous rechercher
+   </label>
+   <input class="fr-input" placeholder="Code postal, nom de la ville" type="search" id="search-784-input" name="search-784-input" [(ngModel)]="elementSearch" >
+   <button class="fr-btn" title="Rechercher la ville" (click)="submitForm()">
+       code postal, nom de la ville
+    </button>
+</div>
+<div *ngIf="innerError!=''" style="color: red;">{{innerError}}</div>
