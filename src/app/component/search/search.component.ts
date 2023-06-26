@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { City } from 'src/app/interface/city';
 import { DataService } from 'src/app/services/data.service';
 
@@ -11,6 +11,8 @@ export class SearchComponent {
   elementSearch="";
   innerError="";
   tabItemSearch:City[]=[];
+  @Output() sendCity= new EventEmitter<City>();
+
   constructor(
     private dataService:DataService
   ){}
@@ -25,12 +27,10 @@ export class SearchComponent {
 
       //is ville
       }else if(this.elementSearch.trim().match("^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")){
-        
+
         this.dataService.getGeographicalCoordinatesWithCity(this.elementSearch).subscribe({
           next:(tabCity)=>{
             this.tabItemSearch=tabCity;
-            console.log(tabCity);
-            
           }
         });
       //error it is not ville and code postal
@@ -40,5 +40,13 @@ export class SearchComponent {
     }else{
       this.innerError="Ce champs doit est obligatoire !";
     }
+  }
+  sendCityChoose(city:City|null){
+    if(city!=null){
+      this.dataService.getDataMeteo(city.coordinate).subscribe(boolean=>{
+        this.sendCity.emit(city);
+      })
+    }
+    this.tabItemSearch=[];
   }
 }

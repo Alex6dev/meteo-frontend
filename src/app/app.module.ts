@@ -8,12 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './component/search/search.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ModalChooseCityComponent } from './component/modal-choose-city/modal-choose-city.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent
+    SearchComponent,
+    ModalChooseCityComponent
   ],
   imports: [
     BrowserModule,

@@ -1,29 +1,60 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { City } from '../interface/city';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiAdresseDto } from '../interface/api-adresse-dto';
+import { ApiDataMeteo, ApiDataMeteoDto, UnitsDataMeteo } from '../interface/api-data-meteo-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  //data meteo of city
+  private dataMeteo= new BehaviorSubject<ApiDataMeteo|undefined>(undefined);
+  dataMeteo$=this.dataMeteo.asObservable();
+
+  //units data 
+  private unitsDataMeteo=new BehaviorSubject<UnitsDataMeteo|undefined>(undefined);
+  unitsDataMeteo$=this.unitsDataMeteo.asObservable();
+
+  
 
   constructor(
     private http : HttpClient
-  ) { }
+  ) {}
 
-  getDataMeteo(){
-    this.http.get("https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&hourly=temperature_2m,rain,uv_index").subscribe({
-      next:(value)=>{
-        console.log(value);
-        
-      }, 
-      error:(err)=>{
-        console.log("error: "+err);
-        
-      }
-    })
+  setUnitsDataMeteo(unitsDataMeteo:UnitsDataMeteo|undefined){
+    this.unitsDataMeteo.next(unitsDataMeteo);
+    console.log(this.dataMeteo);
+  }
+  setDataMeteo(dataMeteo:ApiDataMeteo|undefined){
+    this.dataMeteo.next(dataMeteo);
+  }
+
+  getDataMeteo(coordonate:number[]):Observable<boolean>{ 
+    return new Observable<boolean>(subscriber=>{
+      this.http.get<ApiDataMeteoDto>(`https://api.open-meteo.com/v1/forecast?latitude=${coordonate[1]}&longitude=${coordonate[0]}5&hourly=temperature_2m,rain,uv_index`).subscribe({
+        next:(value)=>{
+          this.setUnitsDataMeteo({
+            temperature_2m: value.hourly_units.temperature_2m,
+            rain:           value.hourly_units.rain,
+            uv_index:       value.hourly_units.uv_index
+          });
+          this.setDataMeteo({
+            time:           value.hourly.time,
+            temperature_2m: value.hourly.temperature_2m,
+            rain:           value.hourly.rain,
+            uv_index:       value.hourly.uv_index
+          });
+          subscriber.next(true);
+              
+        }, 
+        error:(err)=>{
+          console.log("error: "+err);
+          subscriber.next(false);
+        }
+      })
+    })   
   }
 
   getGeographicalCoordinatesWithCity(city:string):Observable<City[]>{

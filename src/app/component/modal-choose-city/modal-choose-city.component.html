@@ -1,0 +1,23 @@
+<div id="backgroundModal">
+    <div id="boxModal">
+        <div >
+            <div id="headerModal">
+                <h2>Merci de choisir votre ville</h2>
+                <button id="btn-close" (click)="closeModal()">
+                    <img src="../../../assets/x-lg.svg" alt="icone fermeture de la modal">
+    
+                </button>
+            </div>
+
+            <div id="modal">
+                <div *ngFor="let city of tabCity" class="cardChooseCity" (click)="chooseCity(city)">
+                    <h3 >
+                        {{city.nameCity}}
+                    </h3>
+                    <p >{{city.postcode}}</p>
+                </div>
+            </div>
+            <p style="margin: 1rem 0 0 0;">S'il la ville que vous rechercher n'apparaît pas merci de compléter votre rechercher</p>
+        </div>
+    </div>
+</div>

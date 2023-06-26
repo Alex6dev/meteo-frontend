@@ -8,3 +8,4 @@
     </button>
 </div>
 <div *ngIf="innerError!=''" style="color: red;">{{innerError}}</div>
+<app-modal-choose-city *ngIf="tabItemSearch.length>0" [tabCity]="tabItemSearch" (sendCityChoose)="sendCityChoose($event)"></app-modal-choose-city>
