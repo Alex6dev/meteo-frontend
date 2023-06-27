@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './component/search/search.component';
 import { ModalChooseCityComponent } from './component/modal-choose-city/modal-choose-city.component';
+import { ContainerGraphModule } from './module/container-graph/container-graph.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ModalChooseCityComponent } from './component/modal-choose-city/modal-ch
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ContainerGraphModule
   ],
   providers: [],
   bootstrap: [AppComponent]

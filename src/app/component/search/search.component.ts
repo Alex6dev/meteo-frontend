@@ -47,6 +47,7 @@ export class SearchComponent {
   }
   sendCityChoose(city:City|null){
     if(city!=null){
+      
       //if i have coordinate with city name
       if(city.coordinate){
         console.log("coordinate present");

@@ -1,2 +1,3 @@
-<app-search ></app-search>
+<app-search (sendCity)="getCity($event)" ></app-search>
+<app-main-graph [city]="city!" *ngIf="city"></app-main-graph>
 

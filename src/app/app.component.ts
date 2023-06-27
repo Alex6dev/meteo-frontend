@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { DataService } from './services/data.service';
+import { City } from './interface/city';
 
+
+// const fakeCity:City={
+//   nameCity:"Lille",
+//   postcode:59000,
+//   coordinate:[2.515,50.5456]
+// }
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,12 +14,11 @@ import { DataService } from './services/data.service';
 })
 export class AppComponent {
   title = 'meteo';
+  // city:City|null=fakeCity;
+  city:City|null=null;
 
 
-  ngOnInit(){
-    // this.dataService.getDataVille();
-    // this.dataService.getDataMeteo();
-    // window.sessionStorage.setItem("language",document.documentElement.lang)    
-      
+  getCity(city:City|null){
+    this.city=city;
   }
 }
