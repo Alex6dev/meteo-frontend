@@ -34,11 +34,7 @@ export class RainGraphComponent {
       },
       xAxis: {
         categories: this.dataRain.time.slice(0,96),
-        tickInterval:24,
-        title: {
-          enabled: true,
-          text:"Jour et heure"
-        },
+        tickInterval:24
       },
       series: [{
         name: this.city.nameCity,

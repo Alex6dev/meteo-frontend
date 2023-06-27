@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MainGraphComponent } from './component/main-graph/main-graph.component';
 import { TempeGraphComponent } from './component/tempe-graph/tempe-graph.component';
 import { RainGraphComponent } from './component/rain-graph/rain-graph.component';
+import { UvGraphComponent } from './component/uv-graph/uv-graph.component';
 
 
 
@@ -10,7 +11,8 @@ import { RainGraphComponent } from './component/rain-graph/rain-graph.component'
   declarations: [
     MainGraphComponent,
     TempeGraphComponent,
-    RainGraphComponent
+    RainGraphComponent,
+    UvGraphComponent
   ],
   imports: [
     CommonModule
