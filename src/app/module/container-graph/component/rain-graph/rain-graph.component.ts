@@ -1,40 +1,39 @@
 import { Component, Input } from '@angular/core';
-import { GraphTempe } from '../../interface/graph-tempe';
-import * as Highcharts from 'highcharts';
 import { City } from 'src/app/interface/city';
+import { GraphRain } from '../../interface/graph-rain';
+import * as Highcharts from 'highcharts';
 
 @Component({
-  selector: 'app-tempe-graph [unit] [dataTempe] [city]',
-  templateUrl: './tempe-graph.component.html',
-  styleUrls: ['./tempe-graph.component.css']
+  selector: 'app-rain-graph [unit] [dataRain] [city]',
+  templateUrl: './rain-graph.component.html',
+  styleUrls: ['./rain-graph.component.css']
 })
-export class TempeGraphComponent {
+export class RainGraphComponent {
   @Input() unit!:string;
-  @Input() dataTempe!:GraphTempe;
+  @Input() dataRain!:GraphRain;
   @Input() city!:City;
+
   ngOnInit(){
-    
     const options: any = {
       chart: {
         borderColor: '#1212ff',
         borderWidth: 2,
-        type: 'line'
+        type: 'column'
       },
       title: {
-        text: "Diagramme de températures ("+this.unit+") pour 4 jour"
+        text: "Diagramme des précipitations ("+this.unit+") pour 4 jour"
       },
       credits: {
         enabled: false
       },
       yAxis:{
-        tickInterval:2,
         title:{
           enabled:false
         }
 
       },
       xAxis: {
-        categories: this.dataTempe.time.slice(0,96),
+        categories: this.dataRain.time.slice(0,96),
         tickInterval:24,
         title: {
           enabled: true,
@@ -43,10 +42,11 @@ export class TempeGraphComponent {
       },
       series: [{
         name: this.city.nameCity,
-        data: this.dataTempe.temperature_2m.slice(0,96),
+        data: this.dataRain.rain.slice(0,96),
         color:'#1212ff'
       }]
     }
-    Highcharts.chart('containerGraphTempe', options);
+    Highcharts.chart('containerGraphRain', options);
   }
+  
 }
