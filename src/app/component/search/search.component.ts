@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, booleanAttribute } from '@angular/core';
 import { City } from 'src/app/interface/city';
 import { DataService } from 'src/app/services/data.service';
 
@@ -23,12 +23,16 @@ export class SearchComponent {
 
       //is codepostal
       if(this.elementSearch.match("^[0-9]{5}$")){
-        //todo: this.dataService
+        this.dataService.getGeographicalCoordinatesWithCityCodepost(this.elementSearch).subscribe({
+          next:(tabCity)=>{
+            this.tabItemSearch=tabCity;
+          }
+        });
 
       //is ville
       }else if(this.elementSearch.trim().match("^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")){
 
-        this.dataService.getGeographicalCoordinatesWithCity(this.elementSearch).subscribe({
+        this.dataService.getGeographicalCoordinatesWithCityName(this.elementSearch).subscribe({
           next:(tabCity)=>{
             this.tabItemSearch=tabCity;
           }
@@ -43,9 +47,31 @@ export class SearchComponent {
   }
   sendCityChoose(city:City|null){
     if(city!=null){
-      this.dataService.getDataMeteo(city.coordinate).subscribe(boolean=>{
-        this.sendCity.emit(city);
-      })
+      //if i have coordinate with city name
+      if(city.coordinate){
+        console.log("coordinate present");
+        
+        this.dataService.getDataMeteo(city.coordinate!).subscribe(boolean=>{
+          if(boolean){
+            this.sendCity.emit(city);
+          }else{
+            this.innerError="Une erreur est survenu."
+          }
+        })
+      //else i not have coordinate with city codepostal
+      }else{
+
+        this.dataService.getGeographicalCoordinatesWithCityName(city.nameCity).subscribe(tabCity=>{
+          this.dataService.getDataMeteo(tabCity[0].coordinate!).subscribe(boolean=>{
+            if(boolean){
+              this.sendCity.emit(city);
+            }else{
+              this.innerError="Une erreur est survenu."
+            }
+          })
+        })
+      }
+
     }
     this.tabItemSearch=[];
   }

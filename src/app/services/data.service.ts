@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { City } from '../interface/city';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiAdresseDto } from '../interface/api-adresse-dto';
-import { ApiDataMeteo, ApiDataMeteoDto, UnitsDataMeteo } from '../interface/api-data-meteo-dto';
+import { ApiCityCodePostalDto, ApiDataMeteoDto } from '../interface/api-data-meteo-dto';
+import { ApiDataMeteo, UnitsDataMeteo } from '../interface/api-data-meteo';
 
 @Injectable({
   providedIn: 'root'
@@ -57,12 +58,10 @@ export class DataService {
     })   
   }
 
-  getGeographicalCoordinatesWithCity(city:string):Observable<City[]>{
-    //https://api-adresse.data.gouv.fr/search/?postcode=59000
+  getGeographicalCoordinatesWithCityName(city:string):Observable<City[]>{
     return new Observable<City[]>(subscriber=>{
       this.http.get<ApiAdresseDto>(`https://api-adresse.data.gouv.fr/search/?q=${city}&type=municipality`).subscribe({
         next:(value)=>{
-          console.log(value);
           if(value.features.length>0){
             let tabCity:City[]=[];
             value.features.forEach((feature)=>{
@@ -84,11 +83,34 @@ export class DataService {
         },
         error:(err)=>{
           console.log("error: "+err);
-          return -1;
         }
       })
-
     })
-
+  }
+  getGeographicalCoordinatesWithCityCodepost(city:string):Observable<City[]>{
+    return new Observable<City[]>(subscriber=>{
+      this.http.get<ApiCityCodePostalDto[]>(`https://geo.api.gouv.fr/communes?codePostal=${city}`).subscribe({
+        next:(value)=>{
+          console.log(value);
+          if(value.length>0){
+            let tabCity:City[]=[];
+            value.forEach((feature)=>{
+              tabCity.push({
+                nameCity:feature.nom,
+                postcode: feature.codesPostaux[0]
+              })
+            })
+            subscriber.next(tabCity);
+            
+          }else{
+            //error
+          }
+          
+        },
+        error:(err)=>{
+          console.log("error: "+err);
+        }
+      })
+    })
   }
 }

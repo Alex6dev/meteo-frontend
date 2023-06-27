@@ -1,6 +1,6 @@
 export interface City {
     nameCity:string,
-    postcode:number,
-    coordinate:number[]
+    postcode:number|string,
+    coordinate?:number[]
 }
 
